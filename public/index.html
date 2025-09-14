@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies API - Documentación</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5);
+        }
+
+        .card h2 {
+            color: #5a67d8;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .endpoint {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 10px 0;
+            border-left: 4px solid #5a67d8;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+            margin-right: 10px;
+        }
+
+        .method.get { background: #48bb78; }
+        .method.post { background: #4299e1; }
+        .method.put { background: #ed8936; }
+        .method.delete { background: #f56565; }
+
+        .url {
+            font-family: 'Courier New', monospace;
+            background: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .description {
+            margin-top: 8px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .auth-note {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-size: 0.85em;
+            border: 1px solid #feb2b2;
+        }
+
+        .example {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            overflow-x: auto;
+        }
+
+        .footer {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .footer h3 {
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 Movies API</h1>
+            <p>API RESTful para gestión de películas y directores con autenticación JWT</p>
+        </div>
+
+        <div class="content">
+            <!-- Autenticación -->
+            <div class="card">
+                <h2>🔐 Autenticación</h2>
+                
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="url">/api/auth/register</span>
+                    <div class="description">Registrar nuevo usuario</div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="url">/api/auth/login</span>
+                    <div class="description">Iniciar sesión</div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="url">/api/auth/profile</span>
+                    <div class="description">Obtener perfil del usuario</div>
+                    <div class="auth-note">🔒 Requiere autenticación</div>
+                </div>
+
+                <div class="example">
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "usuario",
+    "email": "usuario@email.com",
+    "password": "password123"
+  }'
+                </div>
+            </div>
+
+            <!-- Películas -->
+            <div class="card">
+                <h2>🎥 Películas</h2>
+                
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="url">/api/movies</span>
+                    <div class="description">Obtener todas las películas (con filtros y paginación)</div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="url">/api/movies/:id</span>
+                    <div class="description">Obtener película por ID</div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="url">/api/movies/search?q=título</span>
+                    <div class="description">Buscar películas por título</div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="url">/api/movies/genre/:genre</span>
+                    <div class="description">Filtrar películas por género</div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="url">/api/movies</span>
+                    <div class="description">Crear nueva película</div>
+                    <div class="auth-note">🔒 Requiere autenticación de administrador</div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method put">PUT</span>
+                    <span class="url">/api/movies/:id</span>
+                    <div class="description">Actualizar película</div>
+                    <div class="auth-note">🔒 Requiere autenticación de administrador</div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method delete">DELETE</span>
+                    <span class="url">/api/movies/:id</span>
+                    <div class="description">Eliminar película</div>
+                    <div class="auth-note">🔒 Requiere autenticación de administrador</div>
+                </div>
+
+                <div class="example">
+curl -X GET "http://localhost:3000/api/movies?genre=accion&year=2023&page=1&limit=5"
+                </div>
+            </div>
+
+            <!-- Directores -->
+            <div class="card">
+                <h2>🎭 Directores</h2>
+                
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="url">/api/directors</span>
+                    <div class="description">Obtener todos los directores (con filtros y paginación)</div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="url">/api/directors/:id</span>
+                    <div class="description">Obtener director por ID (incluye sus películas)</div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="url">/api/directors/search?q=nombre</span>
+                    <div class="description">Buscar directores por nombre</div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="url">/api/directors/nationality/:nationality</span>
+                    <div class="description">Filtrar directores por nacionalidad</div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="url">/api/directors/stats</span>
+                    <div class="description">Obtener estadísticas de directores</div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="url">/api/directors</span>
+                    <div class="description">Crear nuevo director</div>
+                    <div class="auth-note">🔒 Requiere autenticación de administrador</div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method put">PUT</span>
+                    <span class="url">/api/directors/:id</span>
+                    <div class="description">Actualizar director</div>
+                    <div class="auth-note">🔒 Requiere autenticación de administrador</div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method delete">DELETE</span>
+                    <span class="url">/api/directors/:id</span>
+                    <div class="description">Eliminar director</div>
+                    <div class="auth-note">🔒 Requiere autenticación de administrador</div>
+                </div>
+
+                <div class="example">
+curl -X GET "http://localhost:3000/api/directors/search?q=Spielberg"
+                </div>
+            </div>
+
+            <!-- Filtros Avanzados -->
+            <div class="card">
+                <h2>⚙️ Filtros y Parámetros</h2>
+                
+                <h3>Parámetros de Películas:</h3>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li><strong>genre</strong> - Filtrar por género (separados por coma)</li>
+                    <li><strong>year</strong> - Filtrar por año</li>
+                    <li><strong>minRating</strong> - Calificación mínima</li>
+                    <li><strong>maxRating</strong> - Calificación máxima</li>
+                    <li><strong>director</strong> - ID del director</li>
+                    <li><strong>search</strong> - Búsqueda de texto completo</li>
+                    <li><strong>page</strong> - Número de página (default: 1)</li>
+                    <li><strong>limit</strong> - Elementos por página (default: 10)</li>
+                    <li><strong>sortBy</strong> - Campo para ordenar (title, year, rating, etc.)</li>
+                    <li><strong>order</strong> - Orden: asc o desc</li>
+                </ul>
+
+                <h3>Parámetros de Directores:</h3>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li><strong>nationality</strong> - Filtrar por nacionalidad</li>
+                    <li><strong>isActive</strong> - Filtrar por estado activo (true/false)</li>
+                    <li><strong>search</strong> - Búsqueda por nombre</li>
+                    <li><strong>page</strong> - Número de página</li>
+                    <li><strong>limit</strong> - Elementos por página</li>
+                    <li><strong>sortBy</strong> - Campo para ordenar</li>
+                    <li><strong>order</strong> - Orden: asc o desc</li>
+                </ul>
+
+                <div class="example">
+# Películas de acción del 2023 con rating > 7
+curl -X GET "http://localhost:3000/api/movies?genre=accion&year=2023&minRating=7"
+
+# Directores argentinos activos
+curl -X GET "http://localhost:3000/api/directors?nationality=Argentina&isActive=true"
+                </div>
+            </div>
+
+            <!-- Ejemplos de Uso -->
+            <div class="card">
+                <h2>📋 Ejemplos de Uso</h2>
+                
+                <h3>1. Registrar usuario y obtener token:</h3>
+                <div class="example">
+# Registro
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "admin",
+    "email": "admin@movies.com", 
+    "password": "admin123"
+  }'
+
+# Login
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "admin@movies.com",
+    "password": "admin123"
+  }'
+                </div>
+
+                <h3>2. Crear un director:</h3>
+                <div class="example">
+curl -X POST http://localhost:3000/api/directors \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer TU_TOKEN_JWT" \
+  -d '{
+    "name": "Steven",
+    "lastName": "Spielberg",
+    "birthDate": "1946-12-18",
+    "nationality": "Estadounidense",
+    "biography": "Director legendario de Hollywood...",
+    "awards": [
+      {
+        "name": "Oscar",
+        "year": 1994,
+        "category": "Mejor Director"
+      }
+    ]
+  }'
+                </div>
+
+                <h3>3. Crear una película:</h3>
+                <div class="example">
+curl -X POST http://localhost:3000/api/movies \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer TU_TOKEN_JWT" \
+  -d '{
+    "title": "Jurassic Park",
+    "director": "DIRECTOR_ID_AQUI",
+    "year": 1993,
+    "genre": ["Ciencia Ficción", "Aventura"],
+    "duration": 127,
+    "rating": 8.1,
+    "synopsis": "Un parque temático con dinosaurios...",
+    "budget": 63000000,
+    "boxOffice": 1029153882
+  }'
+                </div>
+            </div>
+
+            <!-- Códigos de Respuesta -->
+            <div class="card">
+                <h2>📊 Códigos de Respuesta</h2>
+                
+                <div style="margin: 15px 0;">
+                    <strong style="color: #48bb78;">✅ 200 OK</strong> - Solicitud exitosa<br>
+                    <strong style="color: #4299e1;">✅ 201 Created</strong> - Recurso creado exitosamente<br>
+                    <strong style="color: #ed8936;">⚠️ 400 Bad Request</strong> - Error en los datos enviados<br>
+                    <strong style="color: #f56565;">🔒 401 Unauthorized</strong> - Token inválido o faltante<br>
+                    <strong style="color: #9f7aea;">🚫 403 Forbidden</strong> - Permisos insuficientes<br>
+                    <strong style="color: #f56565;">❌ 404 Not Found</strong> - Recurso no encontrado<br>
+                    <strong style="color: #f56565;">💥 500 Internal Server Error</strong> - Error del servidor
+                </div>
+
+                <h3>Ejemplo de respuesta exitosa:</h3>
+                <div class="example">
+{
+  "success": true,
+  "message": "Película creada exitosamente",
+  "data": {
+    "_id": "64a7b2c3d4e5f6789012345a",
+    "title": "Jurassic Park",
+    "director": {
+      "_id": "64a7b1c2d3e4f5678901234b",
+      "name": "Steven",
+      "lastName": "Spielberg"
+    },
+    "year": 1993,
+    "genre": ["Ciencia Ficción", "Aventura"],
+    "duration": 127,
+    "rating": 8.1,
+    "createdAt": "2023-07-07T10:30:00.000Z"
+  }
+}
+                </div>
+
+                <h3>Ejemplo de respuesta con error:</h3>
+                <div class="example">
+{
+  "success": false,
+  "message": "Errores de validación",
+  "errors": [
+    {
+      "field": "title",
+      "message": "El título es obligatorio"
+    },
+    {
+      "field": "year",
+      "message": "El año debe ser posterior a 1900"
+    }
+  ]
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h3>📚 Información del Proyecto</h3>
+            <p><strong>Estudiante:</strong> Teo Martin Indomito</p>
+            <p><strong>Materia:</strong> Aplicaciones Hibridas</p>
+            <p><strong>Docente:</strong> Jonathan Emanuel Cruz</p>
+            <p><strong>Comisión:</strong>DWM4AP</p>
+            <br>
+            <p style="font-size: 0.9em; opacity: 0.8;">
+                🔗 API Base URL: <code>http://localhost:3000</code><br>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Pequeña animación para las cartas
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
