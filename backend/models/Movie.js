@@ -69,7 +69,7 @@ const movieSchema = new mongoose.Schema({
 });
 
 // Índices para búsqueda eficiente
-movieSchema.index({ title: 'text', synopsis: 'text' });
+// movieSchema.index({ title: 'text', synopsis: 'text' });
 movieSchema.index({ genre: 1 });
 movieSchema.index({ year: 1 });
 movieSchema.index({ rating: -1 });

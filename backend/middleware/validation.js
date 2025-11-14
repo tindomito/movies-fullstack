@@ -65,16 +65,17 @@ const schemas = {
 
     // Validación para directores
     createDirector: Joi.object({
-        name: Joi.string().max(100).required(),
-        lastName: Joi.string().max(100).required(),
-        birthDate: Joi.date().max('now').required(),
-        nationality: Joi.string().required(),
-        biography: Joi.string().max(2000),
-        awards: Joi.array().items(Joi.object({
-            name: Joi.string(),
-            year: Joi.number().integer(),
-            category: Joi.string()
-        }))
+    name: Joi.string().max(100).required(),
+    lastName: Joi.string().max(100).required(),
+    birthDate: Joi.date().max('now').required(),
+    nationality: Joi.string().required(),
+    biography: Joi.string().max(2000).allow('').optional(),  
+    isActive: Joi.boolean().optional(),                       
+    awards: Joi.array().items(Joi.object({
+        name: Joi.string(),
+        year: Joi.number().integer(),
+        category: Joi.string()
+    })).optional()                                            
     }),
 
     updateDirector: Joi.object({
