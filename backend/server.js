@@ -37,7 +37,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/movies', movieRoutes);
 app.use('/api/directors', directorRoutes);
 
-// Manejo de errores 404
+// Manejo de errores 404ss
 app.use((req, res) => {
     res.status(404).json({
         success: false,
