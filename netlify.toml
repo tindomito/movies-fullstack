@@ -1,0 +1,19 @@
+[build]
+  publish = "frontend/dist"
+  command = "cd frontend && npm install && npm run build"
+
+[functions]
+  directory = "backend/netlify/functions"
+  node_bundler = "esbuild"
+
+# Redirige todas las llamadas /api/* a la función serverless
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+# SPA fallback: cualquier ruta que no sea un archivo va al index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
