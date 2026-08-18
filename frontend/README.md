@@ -1,84 +1,165 @@
-Cómo levantar el proyecto
-1. Clonar repositorio
-bashgit clone https://github.com/tindomito/movies-fullstack.git
+# Movies Fullstack
+
+API REST de películas y directores con autenticación JWT y roles, más un cliente en React.
+Trabajo final de Aplicaciones Híbridas.
+
+**Stack** — Backend: Node.js, Express, MongoDB (Mongoose), JWT, Joi, bcrypt. Frontend: React, Vite, React Router, Axios.
+
+---
+
+## Cómo levantar el proyecto
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/tindomito/movies-fullstack.git
+```
+
+```bash
 cd movies-fullstack
-2. Configurar Backend
-bashcd backend
+```
+
+### 2. Base de datos
+
+El proyecto necesita una instancia propia de MongoDB. Podés usar un cluster gratuito en
+[MongoDB Atlas](https://cloud.mongodb.com) (acordate de habilitar tu IP en Network Access)
+o una instalación local de MongoDB Community.
+
+### 3. Backend
+
+```bash
+cd backend
+```
+
+```bash
 npm install
-Crear archivo .env con:
-MONGODB_URI=mongodb+srv://teoindomito_db_user:admin123@clusterhibridas.yaebfqc.mongodb.net/movies_api?retryWrites=true&w=majority
-JWT_SECRET=tu_clave_secreta_aqui
+```
+
+Copiá `.env.example` a `.env` y completá los valores con tu propia conexión:
+
+```
+MONGODB_URI=mongodb+srv://<usuario>:<password>@<cluster>.mongodb.net/movies_api?retryWrites=true&w=majority
+JWT_SECRET=una_clave_larga_y_aleatoria
 JWT_EXPIRES_IN=7d
 PORT=3000
-Iniciar backend:
-bashnpm run dev
-Backend corre en: http://localhost:3000
-3. Configurar Frontend
-Abrir nueva terminal:
-bashcd frontend
-npm install
+```
+
+```bash
 npm run dev
-Frontend corre en: http://localhost:5173
+```
 
-Usuario de prueba
-Email: admin@movies.com
-Password: admin123
-Importante: Después de registrarte, cambiar el rol a "admin" en MongoDB Compass:
+Backend en `http://localhost:3000`.
 
-Conectar Compass a la base de datos
-Ir a: movies_api → users
-Editar tu usuario: "role": "user" → "role": "admin"
+### 4. Frontend
 
+En otra terminal:
 
-Endpoints principales
-Autenticación
+```bash
+cd frontend
+```
 
-POST /api/auth/register - Registrarse
-POST /api/auth/login - Login
+```bash
+npm install
+```
 
-Películas
+```bash
+npm run dev
+```
 
-GET /api/movies - Todas las películas
-GET /api/movies/:id - Una película
-POST /api/movies - Crear (admin)
-PUT /api/movies/:id - Editar (admin)
-DELETE /api/movies/:id - Eliminar (admin)
+Frontend en `http://localhost:5173`.
 
-Directores
+---
 
-GET /api/directors - Todos los directores
-GET /api/directors/:id - Un director
-POST /api/directors - Crear (admin)
-PUT /api/directors/:id - Editar (admin)
-DELETE /api/directors/:id - Eliminar (admin)
+## Crear un usuario administrador
 
+Las rutas de lectura son públicas, pero crear, editar y eliminar requiere rol `admin`.
+El registro siempre asigna rol `user`, así que el primer admin se promueve a mano:
 
-Estructura básica
+1. Registrate desde `/register`.
+2. Desde MongoDB Compass o Atlas, abrí `movies_api` → `users`.
+3. Editá tu usuario: cambiá `"role": "user"` por `"role": "admin"`.
+4. Cerrá sesión y volvé a iniciarla para que el cliente tome el rol nuevo.
+
+Para cargar datos, creá primero un director: las películas requieren uno asociado.
+
+---
+
+## Endpoints principales
+
+### Autenticación
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| POST | `/api/auth/register` | Registrarse |
+| POST | `/api/auth/login` | Iniciar sesión |
+| GET | `/api/auth/profile` | Perfil del usuario actual (requiere token) |
+| POST | `/api/auth/refresh` | Renovar token (requiere token) |
+
+### Películas
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| GET | `/api/movies` | Listado con filtros y paginación |
+| GET | `/api/movies/search?q=` | Búsqueda por título |
+| GET | `/api/movies/genre/:genre` | Filtrar por género |
+| GET | `/api/movies/:id` | Detalle |
+| POST | `/api/movies` | Crear (admin) |
+| PUT | `/api/movies/:id` | Editar (admin) |
+| DELETE | `/api/movies/:id` | Eliminar (admin) |
+
+### Directores
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| GET | `/api/directors` | Listado con filtros y paginación |
+| GET | `/api/directors/search?q=` | Búsqueda por nombre |
+| GET | `/api/directors/stats` | Estadísticas por nacionalidad |
+| GET | `/api/directors/nationality/:nationality` | Filtrar por nacionalidad |
+| GET | `/api/directors/:id` | Detalle, con sus películas |
+| POST | `/api/directors` | Crear (admin) |
+| PUT | `/api/directors/:id` | Editar (admin) |
+| DELETE | `/api/directors/:id` | Eliminar (admin) |
+
+---
+
+## Estructura
+
+```
 movies-fullstack/
-├── backend/           # API REST
-│   ├── controllers/   # Lógica
-│   ├── models/        # Esquemas MongoDB
-│   ├── routes/        # Rutas
-│   ├── middleware/    # Auth y validaciones
+├── netlify.toml              # Configuración de deploy
+├── backend/                  # API REST
+│   ├── controllers/          # Lógica de negocio
+│   ├── models/               # Esquemas de Mongoose
+│   ├── routes/               # Definición de rutas
+│   ├── middleware/           # Auth JWT y validaciones Joi
+│   ├── netlify/functions/    # Wrapper serverless de la API
 │   └── server.js
-└── frontend/          # React app
-    ├── src/
-    │   ├── pages/     # Páginas
-    │   ├── components/# Componentes
-    │   ├── context/   # Auth context
-    │   └── services/  # API calls
-    └── App.jsx
+└── frontend/                 # Cliente React
+    └── src/
+        ├── pages/            # Vistas
+        ├── components/       # Navbar, ProtectedRoute
+        ├── context/          # AuthContext
+        └── services/         # Cliente Axios
+```
 
-🛠 Tecnologías
-Backend: Node.js, Express, MongoDB, JWT, Joi, Bcrypt
-Frontend: React, Vite, Axios, React Router
+---
 
-Notas
+## Deploy
 
-El archivo .env NO se sube a GitHub
-Los tokens expiran en 7 días
-Solo usuarios admin pueden crear/editar/eliminar
-MongoDB Atlas necesita conexión a internet
+El repositorio incluye configuración para Netlify (`netlify.toml`): el frontend se publica
+desde `frontend/dist` y la API corre como función serverless, con las llamadas a `/api/*`
+redirigidas hacia ella.
 
+Las variables de entorno (`MONGODB_URI`, `JWT_SECRET`, `JWT_EXPIRES_IN`) se cargan desde el
+panel de Netlify, no desde el repositorio.
+
+---
+
+## Notas
+
+- El archivo `.env` no se versiona. Usá `.env.example` como plantilla.
+- Las contraseñas se hashean con bcrypt y nunca se devuelven en las respuestas.
+- Los tokens expiran a los 7 días por defecto.
+- No se puede eliminar un director que tenga películas asociadas.
 
 Repositorio: https://github.com/tindomito/movies-fullstack
